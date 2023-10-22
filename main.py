@@ -141,37 +141,41 @@ def draw_game(total, max):  # DRAWING THE INTERFACE OF GAME ITSELF SHOWING MAX A
 
 
 draw_menu()
-draw_game(total_on_screen, max_value)
-pygame.display.update()
 
-while is_zero_in_mas(mas) or can_move(mas):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit(0)
-        elif event.type == pygame.KEYDOWN:
-            sum = 0
-            if event.key == pygame.K_LEFT:
-                mas = move_left(mas)
-            elif event.key == pygame.K_RIGHT:
-                mas = move_right(mas)
-            elif event.key == pygame.K_UP:
-                mas = move_up(mas)
-            elif event.key == pygame.K_DOWN:
-                mas = move_down(mas)
 
-            # input()
-            if is_zero_in_mas(mas):
-                empty = get_empty_list(mas)
-                random.shuffle(empty)
-                rand_number = empty.pop()
-                x, y = get_index_from_number(rand_number)
-                mas = get_2_or_4(mas, x, y)
-            pretty_print(mas)
-            total_on_screen = total(mas)
-            max_value = max_element(mas)
-            max_value=int(max_value)
-            draw_game(total_on_screen, max_value)
+def game_algorithm():
+    global total_on_screen, max_value, mas
+    draw_game(total_on_screen, max_value)
     pygame.display.update()
+
+    while is_zero_in_mas(mas) or can_move(mas):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
+            elif event.type == pygame.KEYDOWN:
+                sum = 0
+                if event.key == pygame.K_LEFT:
+                    mas = move_left(mas)
+                elif event.key == pygame.K_RIGHT:
+                    mas = move_right(mas)
+                elif event.key == pygame.K_UP:
+                    mas = move_up(mas)
+                elif event.key == pygame.K_DOWN:
+                    mas = move_down(mas)
+
+                # input()
+                if is_zero_in_mas(mas):
+                    empty = get_empty_list(mas)
+                    random.shuffle(empty)
+                    rand_number = empty.pop()
+                    x, y = get_index_from_number(rand_number)
+                    mas = get_2_or_4(mas, x, y)
+                pretty_print(mas)
+                total_on_screen = total(mas)
+                max_value = max_element(mas)
+                max_value=int(max_value)
+                draw_game(total_on_screen, max_value)
+        pygame.display.update()
 
 draw_game_over_menu()
