@@ -43,8 +43,8 @@ pygame.init()
 
 screen = pygame.display.set_mode((WIDTH, HEIGTH))
 
-total_on_screen = 0
-max_value = 0
+total_on_screen = None
+max_value = None
 
 PLAYERS_RECORD = top_score()
 print(PLAYERS_RECORD)
@@ -60,7 +60,6 @@ def results():  # DISPLAYING 3 BEST RESULTS OF PLAYERS FROM DATA BASE
                                       f""
                                       f"{v[1]}", True, orange)
         screen.blit(result_text, (250, (30 + (20 * i))))
-
 
 
 def draw_menu():  # CREATION OF PRE GAME MENU INPUT NICKNAME OF THE PLAYER
@@ -99,27 +98,37 @@ def draw_menu():  # CREATION OF PRE GAME MENU INPUT NICKNAME OF THE PLAYER
 
 
 def draw_game_over_menu():  # CREATION OF GAME OVER MENU AND ADDING RESULTS TO DATA BASE
+    global  max_value, mas, total_on_screen
     game_over_img = pygame.image.load('gameover.png')
     font = pygame.font.SysFont("ROG FONTS", 24)
+    font2 = pygame.font.SysFont("ROG FONTS", 20)
     game_over_text = font.render(f"Best record:{PLAYERS_RECORD[0][1]}", True, white)
+    game_space_text = font2.render(f"Press SPACE to restart", True, white)
     if max_value > PLAYERS_RECORD[0][1]:
         player_game_over_text = font.render(f"You ROCK!: {max_value}", True, white)
     else:
         player_game_over_text = font.render(f"Your record:{max_value}", True, white)
     insert_db(USERNAME, max_value)
-    while True:
+    restart_game = True
+    while restart_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    mas, total_on_screen, max_value = zero_values(mas, total_on_screen, max_value)
+                    restart_game = False
         screen.blit(game_over_img, (0, 0))
         screen.blit(game_over_text, (25, 225))
         screen.blit(player_game_over_text, (25, 275))
+        screen.blit(game_space_text, (25,475))
         pygame.display.update()
+    screen.fill(black)
 
 
 def draw_game(total, max):  # DRAWING THE INTERFACE OF GAME ITSELF SHOWING MAX AND CURENT MAX VALUES
-    max=int(max)
+    max = int(max)
     pygame.draw.rect(screen, white, HEADER)
     font = pygame.font.SysFont("comicsanms", 70)
     score_font = pygame.font.SysFont("ROG FONTS", 20)
@@ -140,11 +149,9 @@ def draw_game(total, max):  # DRAWING THE INTERFACE OF GAME ITSELF SHOWING MAX A
                 screen.blit(text, (text_x, text_y))
 
 
-draw_menu()
-
-
 def game_algorithm():
     global total_on_screen, max_value, mas
+    total_on_screen, max_value = 0, 0
     draw_game(total_on_screen, max_value)
     pygame.display.update()
 
@@ -174,8 +181,12 @@ def game_algorithm():
                 pretty_print(mas)
                 total_on_screen = total(mas)
                 max_value = max_element(mas)
-                max_value=int(max_value)
+                max_value = int(max_value)
                 draw_game(total_on_screen, max_value)
         pygame.display.update()
 
-draw_game_over_menu()
+
+while True:
+    draw_menu()
+    game_algorithm()
+    draw_game_over_menu()
