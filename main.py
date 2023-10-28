@@ -16,12 +16,12 @@ colours = {
     2: (200, 159, 69),
     4: (115, 93, 94),
     8: (126, 166, 57),
-    16: (238, 255, 6),
+    16: (238, 224, 23),
     32: (234, 156, 117),
     64: (58, 58, 128),
     128: (16, 243, 190),
     256: (5, 6, 99),
-    512: (172, 141, 47),
+    512: (176, 38, 0),
     1024: (172, 56, 1),
     2048: (209, 55, 218),
     4096: (255, 0, 0)
@@ -117,7 +117,7 @@ def draw_game_over_menu():  # CREATION OF GAME OVER MENU AND ADDING RESULTS TO D
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    mas, total_on_screen, max_value = zero_values(mas, total_on_screen, max_value)
+                    mas, total_on_screen, max_value = zero_values()
                     restart_game = False
         screen.blit(game_over_img, (0, 0))
         screen.blit(game_over_text, (25, 225))
@@ -132,8 +132,10 @@ def draw_game(total, max):  # DRAWING THE INTERFACE OF GAME ITSELF SHOWING MAX A
     pygame.draw.rect(screen, white, HEADER)
     font = pygame.font.SysFont("comicsanms", 70)
     score_font = pygame.font.SysFont("ROG FONTS", 20)
-    score_text = score_font.render(f"Score:{total} Max:{max}", True, orange)
-    screen.blit(score_text, (20, 35))
+    total_text = score_font.render(f"Score:{total}", True, orange)
+    max_text = score_font.render(f"Max:{max}", True, orange)
+    screen.blit(total_text, (20, 25))
+    screen.blit(max_text, (20, 55))
     results()
     for row in range(BLOCKS):
         for col in range(BLOCKS):
@@ -187,6 +189,7 @@ def game_algorithm():
 
 
 while True:
+    PLAYERS_RECORD = top_score()
     draw_menu()
     game_algorithm()
     draw_game_over_menu()

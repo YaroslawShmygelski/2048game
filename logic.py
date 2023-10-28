@@ -148,7 +148,7 @@ def max_element(mas):
     max = np.max(mas)
     return max
 
-def zero_values(mas, value1, value2):
+def zero_values():
     mas = [[0, 0, 0, 0],
            [0, 0, 0, 0],
            [0, 0, 0, 0],
