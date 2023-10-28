@@ -8,7 +8,7 @@ mas = [[0, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
        ]
-
+logo = pygame.image.load("2048.png")
 mas[2][3] = 2
 mas[3][1] = 4
 colours = {
@@ -45,9 +45,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGTH))
 
 total_on_screen = None
 max_value = None
-
+control_keys = (
+    pygame.K_RIGHT, pygame.K_LEFT, pygame.K_DOWN, pygame.K_UP, pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
 PLAYERS_RECORD = top_score()
-print(PLAYERS_RECORD)
 
 
 def results():  # DISPLAYING 3 BEST RESULTS OF PLAYERS FROM DATA BASE
@@ -98,7 +98,7 @@ def draw_menu():  # CREATION OF PRE GAME MENU INPUT NICKNAME OF THE PLAYER
 
 
 def draw_game_over_menu():  # CREATION OF GAME OVER MENU AND ADDING RESULTS TO DATA BASE
-    global  max_value, mas, total_on_screen
+    global max_value, mas, total_on_screen
     game_over_img = pygame.image.load('gameover.png')
     font = pygame.font.SysFont("ROG FONTS", 24)
     font2 = pygame.font.SysFont("ROG FONTS", 20)
@@ -122,7 +122,7 @@ def draw_game_over_menu():  # CREATION OF GAME OVER MENU AND ADDING RESULTS TO D
         screen.blit(game_over_img, (0, 0))
         screen.blit(game_over_text, (25, 225))
         screen.blit(player_game_over_text, (25, 275))
-        screen.blit(game_space_text, (25,475))
+        screen.blit(game_space_text, (25, 475))
         pygame.display.update()
     screen.fill(black)
 
@@ -163,32 +163,36 @@ def game_algorithm():
                 pygame.quit()
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
-                sum = 0
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     mas = move_left(mas)
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     mas = move_right(mas)
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     mas = move_up(mas)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     mas = move_down(mas)
 
                 # input()
-                if is_zero_in_mas(mas):
-                    empty = get_empty_list(mas)
-                    random.shuffle(empty)
-                    rand_number = empty.pop()
-                    x, y = get_index_from_number(rand_number)
-                    mas = get_2_or_4(mas, x, y)
-                pretty_print(mas)
-                total_on_screen = total(mas)
-                max_value = max_element(mas)
-                max_value = int(max_value)
-                draw_game(total_on_screen, max_value)
+                if (event.key in control_keys):
+                    if is_zero_in_mas(mas):
+                        empty = get_empty_list(mas)
+                        random.shuffle(empty)
+                        rand_number = empty.pop()
+                        x, y = get_index_from_number(rand_number)
+                        mas = get_2_or_4(mas, x, y)
+                    pretty_print(mas)
+                    total_on_screen = total(mas)
+                    max_value = max_element(mas)
+                    max_value = int(max_value)
+                    draw_game(total_on_screen, max_value)
+                else:
+                    continue
         pygame.display.update()
 
 
 while True:
+    pygame.display.set_icon(logo)
+    pygame.display.set_caption("2048 GAME")
     PLAYERS_RECORD = top_score()
     draw_menu()
     game_algorithm()
