@@ -147,3 +147,13 @@ def total(mas):
 def max_element(mas):
     max = np.max(mas)
     return max
+
+def zero_values():
+    mas = [[0, 0, 0, 0],
+           [0, 0, 0, 0],
+           [0, 0, 0, 0],
+           [0, 0, 0, 0],
+           ]
+    value1=0
+    value2=0
+    return mas, value1, value2

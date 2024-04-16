@@ -5,14 +5,9 @@ with sq.connect("Game.db") as con:
 
     cur.execute("""CREATE TABLE IF NOT EXISTS results(
         name TEXT,
-        score INTEGER
+        score INTEGER 
         )
     """)
-
-    cur.execute("""
-     INSERT INTO results values ('user',0)    
-    """)
-
 
     def insert_db(user, value):
         cur.execute("""
